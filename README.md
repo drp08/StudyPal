@@ -23,6 +23,6 @@ Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-mu
 
 ## Authors 
 
-- @cybercoder-naj
-- @Harini-Sritharar
-- @Virigina-Watson
+- [@cybercoder-naj](https://github.com/cybercoder-naj)
+- [@Harini-Sritharar](https://github.com/Harini-Sritharar)
+- [@Virgina-Watson](https://github.com/Virginia-Watson)
