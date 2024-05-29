@@ -1,5 +1,7 @@
 # StudyPal
 
+[![Create APK artifact](https://github.com/drp08/StudyPal/actions/workflows/build-artifact.yaml/badge.svg)](https://github.com/drp08/StudyPal/actions/workflows/build-artifact.yaml)
+
 This is a Kotlin Multiplatform project.
 
 ## Project Structure
