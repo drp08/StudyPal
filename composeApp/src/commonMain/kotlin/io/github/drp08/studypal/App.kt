@@ -10,19 +10,26 @@ import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import io.github.drp08.studypal.navigation.BottomNavBar
 import io.github.drp08.studypal.navigation.BottomNavItem
+import io.github.drp08.studypal.screens.BlankScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        Navigator(BottomNavItem.Home.screen) { _ ->
-            Scaffold(
-                bottomBar = { BottomNavBar() }
-            ) { paddingValues ->
-                Box(modifier = Modifier.padding(paddingValues)) {
-                    CurrentScreen()
+        Navigator(BlankScreen) { navigator ->
+            if (navigator.lastItem is BlankScreen) {
+                Navigator(BottomNavItem.Home.screen) { _ ->
+                    Scaffold(
+                        bottomBar = { BottomNavBar() }
+                    ) { paddingValues ->
+                        Box(modifier = Modifier.padding(paddingValues)) {
+                            CurrentScreen()
+                        }
+                    }
                 }
+            } else {
+                CurrentScreen()
             }
         }
     }

@@ -21,7 +21,7 @@ sealed class BottomNavItem(
         fun values() = listOf(Home, Calendar, Profile)
     }
 
-    data object Home : BottomNavItem("Home", Icons.Default.Home, PomodoroScreen)
+    data object Home : BottomNavItem("Home", Icons.Default.Home, HomeScreen)
     data object Calendar : BottomNavItem("Calendar", Icons.Default.DateRange, CalendarScreen)
     data object Profile : BottomNavItem("Profile", Icons.Default.Person, ProfileScreen)
 }
