@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import cafe.adriel.voyager.core.screen.Screen
 import io.github.drp08.studypal.screens.CalendarScreen
 import io.github.drp08.studypal.screens.HomeScreen
+import io.github.drp08.studypal.screens.PomodoroScreen
 import io.github.drp08.studypal.screens.ProfileScreen
 
 sealed class BottomNavItem(
@@ -20,7 +21,7 @@ sealed class BottomNavItem(
         fun values() = listOf(Home, Calendar, Profile)
     }
 
-    data object Home : BottomNavItem("Home", Icons.Default.Home, HomeScreen)
+    data object Home : BottomNavItem("Home", Icons.Default.Home, PomodoroScreen)
     data object Calendar : BottomNavItem("Calendar", Icons.Default.DateRange, CalendarScreen)
     data object Profile : BottomNavItem("Profile", Icons.Default.Person, ProfileScreen)
 }
