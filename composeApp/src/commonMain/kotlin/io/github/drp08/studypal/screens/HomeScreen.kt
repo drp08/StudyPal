@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import io.github.drp08.studypal.di.AppModule
 import io.github.drp08.studypal.viewmodels.HomeViewModel
@@ -95,11 +96,19 @@ object HomeScreen : Screen {
                                 Countdown(
                                     from = session.startTime - currentTime,
                                     modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                            } else {
-                                Button(onClick = { navigator.push(PomodoroScreen) }) {
-                                    Text(text = "Check-in")
+                                ) {
+                                    CheckInButton(
+                                        navigator,
+                                        session.endTime,
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    )
                                 }
+                            } else {
+                                CheckInButton(
+                                    navigator = navigator,
+                                    endTime = session.endTime,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
                             }
                         }
                     }
@@ -137,9 +146,11 @@ object HomeScreen : Screen {
                                             modifier = Modifier.fillMaxWidth(),
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
-                                            Text("${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}")
-                                            Text("Subject ${subject.name}")
-                                            Text("Session 0/${subject.noTotalSessions}")
+                                            Text(
+                                                text = "${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}"
+                                            )
+                                            Text(text = subject.name)
+                                            Text(text = "Session 0/${subject.noTotalSessions}")
                                         }
                                     }
                                 }
@@ -151,22 +162,46 @@ object HomeScreen : Screen {
     }
 
     @Composable
-    private fun Countdown(from: Int, modifier: Modifier = Modifier) {
-       var timeLeft by remember { mutableStateOf(from) }
+    private fun Countdown(
+        from: Int,
+        modifier: Modifier = Modifier,
+        onFinish: @Composable () -> Unit = {}
+    ) {
+        var timeLeft by remember { mutableStateOf(from) }
+        var hasFinished by remember { mutableStateOf(false) }
 
         LaunchedEffect(key1 = timeLeft) {
             while (timeLeft > 0) {
                 delay(1000L)
                 timeLeft--
             }
+            hasFinished = true
         }
 
         val time = LocalTime.fromSecondOfDay(timeLeft)
 
-        Text(
-            text = "${time.hour}:${time.minute}:${time.second}",
-            modifier = modifier,
-            fontSize = 18.sp
-        )
+        if (!hasFinished) {
+            Text(
+                text = "${time.hour}:${time.minute}:${time.second}",
+                modifier = modifier,
+                fontSize = 18.sp
+            )
+        } else {
+            onFinish()
+        }
+    }
+
+    @Composable
+    private fun CheckInButton(
+        navigator: Navigator,
+        endTime: Int,
+        modifier: Modifier = Modifier
+    ) {
+        Button(
+            onClick = { navigator.push(PomodoroScreen(endTime)) },
+            modifier = modifier
+        ) {
+            Text(text = "Check-in")
+        }
     }
 }
