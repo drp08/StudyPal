@@ -7,13 +7,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 class PomodoroViewModel : ViewModel() {
-    val endTime = LocalDateTime(2024, 5, 30, 16, 30)
+    val endTime = Clock.System.now().plus(10, DateTimeUnit.MINUTE).toLocalDateTime(TimeZone.currentSystemDefault())
 
     private val _timeUntilBreak = MutableStateFlow(0L)
     val timeUntilBreak = _timeUntilBreak.asStateFlow()

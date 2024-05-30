@@ -11,7 +11,6 @@ import cafe.adriel.voyager.navigator.Navigator
 import io.github.drp08.studypal.navigation.BottomNavBar
 import io.github.drp08.studypal.navigation.BottomNavItem
 import io.github.drp08.studypal.screens.BlankScreen
-import io.github.drp08.studypal.viewmodels.PomodoroViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
