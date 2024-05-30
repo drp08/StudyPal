@@ -1,11 +1,9 @@
 package io.github.drp08.studypal
 
-import Greeting
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import io.github.drp08.studypal.navigation.BottomNavBar
 import io.github.drp08.studypal.navigation.BottomNavItem
@@ -18,8 +16,6 @@ fun App() {
         var response by remember { mutableStateOf("") }
 
         LaunchedEffect(Unit) {
-            val greeting = Greeting()
-            response = greeting.greeting().name
         }
 
         Navigator(BottomNavItem.Home.screen) { _ ->

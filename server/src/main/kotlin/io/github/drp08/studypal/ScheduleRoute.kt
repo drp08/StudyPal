@@ -1,5 +1,6 @@
 package io.github.drp08.studypal
 
+import io.github.drp08.studypal.domain.models.Subject
 import io.ktor.server.application.call
 import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond

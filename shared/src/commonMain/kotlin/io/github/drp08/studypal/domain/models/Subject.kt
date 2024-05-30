@@ -1,4 +1,4 @@
-package io.github.drp08.studypal
+package io.github.drp08.studypal.domain.models
 
 import kotlinx.serialization.Serializable
 
