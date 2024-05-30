@@ -13,16 +13,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     MaterialTheme {
-        var response by remember { mutableStateOf("") }
-
-        LaunchedEffect(Unit) {
-        }
-
         Navigator(BottomNavItem.Home.screen) { _ ->
             Scaffold(
-                content = {
-                    Text(text = response)
-                },
+                content = {},
                 bottomBar = {
                     BottomNavBar()
                 }
