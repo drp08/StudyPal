@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+//    alias(libs.plugins.kotlinKsp)
 }
 
 kotlin {
@@ -22,7 +23,8 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+//            ksp(libs.kotlin.inject.compiler)
+            implementation(libs.kotlin.inject.runtime)
         }
     }
 }
