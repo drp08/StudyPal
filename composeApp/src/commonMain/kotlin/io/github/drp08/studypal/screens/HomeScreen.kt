@@ -33,14 +33,16 @@ object HomeScreen : Screen {
         val PINK = Color(0xFFFFD3D3)
         val navigator = LocalNavigator.currentOrThrow
         // Widget for current session/ next session
-        Box {
+        Card {
                 Column(
                     modifier = Modifier.fillMaxWidth()
                         .wrapContentSize(align = Alignment.TopCenter)
                         .padding(vertical = 10.dp).background(color = BLUE)
                         .clickable(onClick = {navigator.push(ProfileScreen)}) // will route to the Pomodoro screen once completed
                 ) {
-                    Text("Next Session starting in: 00:32:17")
+                    Text("Next Revision/Event")
+                    Text("Subject 1", modifier = Modifier.align(Alignment.CenterHorizontally))
+                    Text("Starts in 00:32:17", modifier = Modifier.align(Alignment.CenterHorizontally))
                 }
         }
         // Widget for upcoming sessions
@@ -48,7 +50,9 @@ object HomeScreen : Screen {
             val scrollState = rememberLazyListState()
             val coroutineScope = rememberCoroutineScope()
             Column {
-            Text(text = "Upcoming sessions/events today",modifier = Modifier.fillMaxWidth().wrapContentSize(align = Alignment.Center).padding(vertical = 70.dp))
+            Text(text = "Upcoming sessions/events today",modifier = Modifier.fillMaxWidth().wrapContentSize(align = Alignment.Center)
+                .padding(vertical = 80.dp)
+                )
                 LazyColumn(
                     state = scrollState,
                     modifier = Modifier.fillMaxWidth()
@@ -74,6 +78,7 @@ object HomeScreen : Screen {
                                 ) {
                                     Text("10:00 - 12:00")
                                     Text("Subject ${it + 1}")
+                                    Text("Session ${it + 2}/10")
                                 }
                                 Column(
                                     modifier = Modifier.padding(15.dp)
@@ -81,6 +86,8 @@ object HomeScreen : Screen {
                                 ) {
                                     Text("13:00 - 15:00")
                                     Text("Subject ${5 - it}")
+                                    Text("Session ${it + 1}/10")
+
                                 }
                             }
 
