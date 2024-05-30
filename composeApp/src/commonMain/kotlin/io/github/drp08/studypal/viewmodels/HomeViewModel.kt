@@ -7,6 +7,7 @@ import io.github.drp08.studypal.domain.models.Subject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class HomeViewModel(
     private val schedulingRepository: SchedulingRepository
@@ -14,9 +15,15 @@ class HomeViewModel(
     private val _sessions = MutableStateFlow(emptyList<Subject>())
     val sessions = _sessions.asStateFlow()
 
+    private val subjects = listOf("Chemistry", "Computer Science", "Mathematics", "Biology", "Physics",
+        "Economics", "Accounting", "History", "Geography", "Sociology", "Literature", "Psychology")
+
     fun addNewSession() {
         viewModelScope.launch {
-            val subject = schedulingRepository.getScheduleForSubject("Chemistry")
+            val randomIndex = Random.nextInt(subjects.size)
+            val randomSubject = subjects[randomIndex]
+
+            val subject = schedulingRepository.getScheduleForSubject(randomSubject)
 
             _sessions.value = sessions.value + subject
         }
