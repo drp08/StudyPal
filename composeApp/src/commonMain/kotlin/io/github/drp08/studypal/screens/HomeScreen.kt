@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -28,13 +29,17 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import io.github.drp08.studypal.di.AppModule
 import io.github.drp08.studypal.viewmodels.HomeViewModel
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 object HomeScreen : Screen {
     @Composable
     override fun Content() {
         val viewModel = viewModel { HomeViewModel(AppModule.schedulingRepository) }
         val sessions by viewModel.sessions.collectAsState()
+        val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time.toSecondOfDay()
 
         val navigator = LocalNavigator.currentOrThrow
 
@@ -68,7 +73,6 @@ object HomeScreen : Screen {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { navigator.push(PomodoroScreen) }
                     ) {
                         Column(
                             modifier = Modifier
@@ -82,14 +86,19 @@ object HomeScreen : Screen {
                                     .align(Alignment.CenterHorizontally),
                                 fontSize = 18.sp
                             )
-                            Text(text = "Starts in")
-                            // TODO change the hardcoded string
-                            Text(
-                                text = "00:30:09",
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally),
-                                fontSize = 18.sp
-                            )
+                            if (session.startTime > currentTime) {
+                                Text(text = "Starts in")
+                                Text(
+                                    text = "00:30:09",
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally),
+                                    fontSize = 18.sp
+                                )
+                            } else {
+                                Button(onClick = { navigator.push(PomodoroScreen) }) {
+                                    Text(text = "Check-in")
+                                }
+                            }
                         }
                     }
                 }
