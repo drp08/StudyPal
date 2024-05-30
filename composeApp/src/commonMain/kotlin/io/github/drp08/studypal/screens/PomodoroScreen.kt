@@ -12,16 +12,24 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
+import io.github.drp08.studypal.viewmodels.PomodoroViewModel
 
 object PomodoroScreen : Screen {
+
     @Composable
     override fun Content() {
+        val viewModel = viewModel<PomodoroViewModel>()
+        val text by viewModel.timer.collectAsState()
+
         Scaffold(
             modifier = Modifier
                 .fillMaxSize(),
@@ -53,7 +61,7 @@ object PomodoroScreen : Screen {
                     )
 
                     Text(
-                        text = "19:20",
+                        text = text.toString(),
                         fontSize = 32.sp
                     )
                 }
