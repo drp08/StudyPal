@@ -24,7 +24,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // put your Multiplatform dependencies here
-            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.11")
+            implementation(libs.ktor.serialization.kotlinx.json)
         }
     }
 }
