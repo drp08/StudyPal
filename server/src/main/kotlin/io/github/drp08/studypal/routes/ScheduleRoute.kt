@@ -16,14 +16,16 @@ import java.time.LocalTime
 
 fun Route.scheduleRouting() {
     get<Schedule> {
+        val oneHour = 60 * 60
+
         val subject = Subject(
             name = it.name,
             startTime = Database.startTime,
-            endTime = Database.startTime + 50 * 60,
+            endTime = Database.startTime + oneHour,
             noTotalSessions = 6
         )
 
-        Database.startTime += 60 * 60
+        Database.startTime += oneHour
         call.respond(subject)
     }
 }
