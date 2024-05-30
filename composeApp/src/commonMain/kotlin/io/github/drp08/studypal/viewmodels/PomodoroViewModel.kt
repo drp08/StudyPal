@@ -12,15 +12,16 @@ class PomodoroViewModel : ViewModel() {
     private val _timer = MutableStateFlow(0)
     val timer = _timer.asStateFlow()
 
-    init {
-        startTimer()
-    }
+    fun startTimer(from: Int) {
+        _timer.value = from
 
-    private fun startTimer() {
         viewModelScope.launch {
             while (true) {
                 delay(1000)
-                _timer.value++
+                _timer.value--
+
+                if (_timer.value <= 0)
+                    break
             }
         }
     }
