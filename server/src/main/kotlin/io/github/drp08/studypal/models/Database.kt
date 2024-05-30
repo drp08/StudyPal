@@ -6,7 +6,6 @@ object Database {
     var startTime = toNearestHour()
 
     private fun toNearestHour(): Int {
-        val now = LocalTime.now()
-        return LocalTime.of(now.hour, 0).toSecondOfDay()
+        return LocalTime.now().plusMinutes(1).toSecondOfDay()
     }
 }
