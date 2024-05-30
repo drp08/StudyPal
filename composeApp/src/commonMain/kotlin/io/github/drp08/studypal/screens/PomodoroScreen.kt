@@ -24,6 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
@@ -33,23 +35,20 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import io.github.drp08.studypal.viewmodels.PomodoroViewModel
+import kotlinx.coroutines.delay
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 object PomodoroScreen : Screen {
 
     @Composable
     override fun Content() {
         val viewModel = viewModel<PomodoroViewModel>()
-        val from = 10
-
-        val current by viewModel.timer.collectAsState()
-        val animatedCurrent by animateFloatAsState(
-            targetValue = current.toFloat(),
-            animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
-        )
-
-        LaunchedEffect(Unit) {
-            viewModel.startTimer(from)
-        }
+        val timeUntilBreak by viewModel.timeUntilBreak.collectAsState()
+        val totalSeconds by viewModel.totalSeconds.collectAsState()
 
         Scaffold(
             modifier = Modifier
@@ -79,7 +78,13 @@ object PomodoroScreen : Screen {
                             Text(text = "Pomodoro long break")
                         }
                     }
-                    Text(text = "Session finishes at 9:30", modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth(), textAlign = TextAlign.Center)
+                    Text(
+                        text = "Session finishes at 9:30",
+                        modifier = Modifier
+                            .padding(vertical = 16.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -89,13 +94,13 @@ object PomodoroScreen : Screen {
                             modifier = Modifier
                                 .fillMaxWidth(0.5f)
                                 .aspectRatio(1f),
-                            progress = (animatedCurrent / from),
+                            progress = (timeUntilBreak.toFloat() / totalSeconds),
                             strokeWidth = 12.dp,
                             strokeCap = StrokeCap.Round
                         )
 
                         Text(
-                            text = current.toString(),
+                            text = timeUntilBreak.toString(),
                             fontSize = 32.sp
                         )
                     }
