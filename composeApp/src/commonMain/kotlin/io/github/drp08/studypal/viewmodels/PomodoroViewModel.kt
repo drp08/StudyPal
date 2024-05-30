@@ -13,7 +13,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
 class PomodoroViewModel : ViewModel() {
-    private val endTime = LocalDateTime(2024, 5, 30, 16, 30)
+    val endTime = LocalDateTime(2024, 5, 30, 16, 30)
 
     private val _timeUntilBreak = MutableStateFlow(0L)
     val timeUntilBreak = _timeUntilBreak.asStateFlow()

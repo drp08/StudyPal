@@ -39,6 +39,8 @@ import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
@@ -79,7 +81,7 @@ object PomodoroScreen : Screen {
                         }
                     }
                     Text(
-                        text = "Session finishes at 9:30",
+                        text = "Session finishes at ${viewModel.endTime.hour}:${viewModel.endTime.minute}",
                         modifier = Modifier
                             .padding(vertical = 16.dp)
                             .fillMaxWidth(),
@@ -99,8 +101,9 @@ object PomodoroScreen : Screen {
                             strokeCap = StrokeCap.Round
                         )
 
+                        val remainingTime = LocalTime.fromSecondOfDay(timeUntilBreak.toInt())
                         Text(
-                            text = timeUntilBreak.toString(),
+                            text = "${remainingTime.minute}:${remainingTime.second}",
                             fontSize = 32.sp
                         )
                     }
