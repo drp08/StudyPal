@@ -6,6 +6,7 @@ import io.github.drp08.studypal.utils.Schedule
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.resources.get
+import io.ktor.client.statement.bodyAsText
 
 class SchedulingRepositoryImpl(
     private val client: HttpClient
