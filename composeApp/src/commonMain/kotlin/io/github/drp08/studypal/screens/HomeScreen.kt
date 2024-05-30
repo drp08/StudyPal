@@ -52,73 +52,89 @@ object HomeScreen : Screen {
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { navigator.push(PomodoroScreen) }
-                ) {
-                    Column(
+                if (sessions.isEmpty()) {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 4.dp, vertical = 6.dp)
                     ) {
-                        Text(text = "Next Revision/Event: ")
                         Text(
-                            text = "Subject 1",
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally),
-                            fontSize = 18.sp
+                            text = "You don't have anything. Click the plus button",
+                            modifier = Modifier.padding(all = 16.dp)
                         )
-                        Text(text = "Starts in")
-                        Text(
-                            text = "00:30:09",
+                    }
+                } else {
+                    val session = sessions[0]
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { navigator.push(PomodoroScreen) }
+                    ) {
+                        Column(
                             modifier = Modifier
-                                .align(Alignment.CenterHorizontally),
-                            fontSize = 18.sp
-                        )
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.dp, vertical = 6.dp)
+                        ) {
+                            Text(text = "Next Revision/Event: ")
+                            Text(
+                                text = session.name,
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally),
+                                fontSize = 18.sp
+                            )
+                            Text(text = "Starts in")
+                            // TODO change the hardcoded string
+                            Text(
+                                text = "00:30:09",
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally),
+                                fontSize = 18.sp
+                            )
+                        }
                     }
                 }
 
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 4.dp, vertical = 6.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                if (sessions.size > 1)
+                    Card(
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = "Upcoming sessions/events today",
-                            fontSize = 18.sp
-                        )
-
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth()
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.dp, vertical = 6.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            items(sessions) { subject ->
-                                val startTime = LocalTime.fromSecondOfDay(subject.startTime)
-                                val endTime = LocalTime.fromSecondOfDay(subject.endTime)
+                            Text(
+                                text = "Upcoming sessions/events today",
+                                fontSize = 18.sp
+                            )
 
-                                Card(
-                                    modifier = Modifier
-                                        .padding(horizontal = 4.dp)
-                                        .fillMaxWidth()
-                                        .padding(vertical = 6.dp)
-                                ) {
-                                    Column(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalAlignment = Alignment.CenterHorizontally
+                            LazyColumn(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                items(sessions.drop(1)) { subject ->
+                                    val startTime = LocalTime.fromSecondOfDay(subject.startTime)
+                                    val endTime = LocalTime.fromSecondOfDay(subject.endTime)
+
+                                    Card(
+                                        modifier = Modifier
+                                            .padding(horizontal = 4.dp)
+                                            .fillMaxWidth()
+                                            .padding(vertical = 6.dp)
                                     ) {
-                                        Text("${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}")
-                                        Text("Subject ${subject.name}")
-                                        Text("Session 0/${subject.noTotalSessions}")
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Text("${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}")
+                                            Text("Subject ${subject.name}")
+                                            Text("Session 0/${subject.noTotalSessions}")
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
             }
         }
     }
