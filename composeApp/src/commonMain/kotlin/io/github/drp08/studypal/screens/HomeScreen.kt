@@ -1,6 +1,5 @@
 package io.github.drp08.studypal.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +16,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,6 +32,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import io.github.drp08.studypal.di.AppModule
 import io.github.drp08.studypal.viewmodels.HomeViewModel
+import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -88,11 +92,9 @@ object HomeScreen : Screen {
                             )
                             if (session.startTime > currentTime) {
                                 Text(text = "Starts in")
-                                Text(
-                                    text = "00:30:09",
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally),
-                                    fontSize = 18.sp
+                                Countdown(
+                                    from = session.startTime - currentTime,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
                                 )
                             } else {
                                 Button(onClick = { navigator.push(PomodoroScreen) }) {
@@ -146,5 +148,25 @@ object HomeScreen : Screen {
                     }
             }
         }
+    }
+
+    @Composable
+    private fun Countdown(from: Int, modifier: Modifier = Modifier) {
+       var timeLeft by remember { mutableStateOf(from) }
+
+        LaunchedEffect(key1 = timeLeft) {
+            while (timeLeft > 0) {
+                delay(1000L)
+                timeLeft--
+            }
+        }
+
+        val time = LocalTime.fromSecondOfDay(timeLeft)
+
+        Text(
+            text = "${time.hour}:${time.minute}:${time.second}",
+            modifier = modifier,
+            fontSize = 18.sp
+        )
     }
 }
