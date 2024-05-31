@@ -1,6 +1,5 @@
 package io.github.drp08.studypal.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +16,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,9 +29,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import io.github.drp08.studypal.di.AppModule
 import io.github.drp08.studypal.viewmodels.HomeViewModel
+import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -88,16 +93,22 @@ object HomeScreen : Screen {
                             )
                             if (session.startTime > currentTime) {
                                 Text(text = "Starts in")
-                                Text(
-                                    text = "00:30:09",
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally),
-                                    fontSize = 18.sp
-                                )
-                            } else {
-                                Button(onClick = { navigator.push(PomodoroScreen) }) {
-                                    Text(text = "Check-in")
+                                Countdown(
+                                    from = session.startTime - currentTime,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                ) {
+                                    CheckInButton(
+                                        navigator,
+                                        session.endTime,
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    )
                                 }
+                            } else {
+                                CheckInButton(
+                                    navigator = navigator,
+                                    endTime = session.endTime,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
                             }
                         }
                     }
@@ -135,9 +146,11 @@ object HomeScreen : Screen {
                                             modifier = Modifier.fillMaxWidth(),
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
-                                            Text("${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}")
-                                            Text("Subject ${subject.name}")
-                                            Text("Session 0/${subject.noTotalSessions}")
+                                            Text(
+                                                text = "${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}"
+                                            )
+                                            Text(text = subject.name)
+                                            Text(text = "Session 0/${subject.noTotalSessions}")
                                         }
                                     }
                                 }
@@ -145,6 +158,50 @@ object HomeScreen : Screen {
                         }
                     }
             }
+        }
+    }
+
+    @Composable
+    private fun Countdown(
+        from: Int,
+        modifier: Modifier = Modifier,
+        onFinish: @Composable () -> Unit = {}
+    ) {
+        var timeLeft by remember { mutableStateOf(from) }
+        var hasFinished by remember { mutableStateOf(false) }
+
+        LaunchedEffect(key1 = timeLeft) {
+            while (timeLeft > 0) {
+                delay(1000L)
+                timeLeft--
+            }
+            hasFinished = true
+        }
+
+        val time = LocalTime.fromSecondOfDay(timeLeft)
+
+        if (!hasFinished) {
+            Text(
+                text = "${time.hour}:${time.minute}:${time.second}",
+                modifier = modifier,
+                fontSize = 18.sp
+            )
+        } else {
+            onFinish()
+        }
+    }
+
+    @Composable
+    private fun CheckInButton(
+        navigator: Navigator,
+        endTime: Int,
+        modifier: Modifier = Modifier
+    ) {
+        Button(
+            onClick = { navigator.push(PomodoroScreen(endTime)) },
+            modifier = modifier
+        ) {
+            Text(text = "Check-in")
         }
     }
 }
