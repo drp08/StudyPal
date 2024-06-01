@@ -44,6 +44,9 @@ kotlin {
             implementation(projects.shared)
 
             implementation(libs.voyager.navigator)
+            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.lifecycle.viewmodel.compose)
+            implementation(libs.kotlinx.datetime)
         }
     }
 }
