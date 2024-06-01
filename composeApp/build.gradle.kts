@@ -47,6 +47,8 @@ kotlin {
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.kotlinx.datetime)
+
+            implementation(libs.kodein.di.framework.compose)
         }
     }
 }

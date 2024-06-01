@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-//    alias(libs.plugins.kotlinKsp)
     kotlin("plugin.serialization") version "2.0.0-RC3"
 }
 
@@ -24,8 +23,7 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-//            ksp(libs.kotlin.inject.compiler)
-//            implementation(libs.kotlin.inject.runtime)
+            implementation(libs.kodein.di.framework.compose)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.resources)
