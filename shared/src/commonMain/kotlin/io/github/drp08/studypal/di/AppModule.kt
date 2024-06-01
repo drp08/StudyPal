@@ -12,7 +12,6 @@ import io.ktor.serialization.kotlinx.json.json
 import org.kodein.di.DI
 import org.kodein.di.bindSingleton
 import org.kodein.di.instance
-import org.kodein.di.newInstance
 
 val appModule = DI {
     bindSingleton<HttpClient>(sync = false) {

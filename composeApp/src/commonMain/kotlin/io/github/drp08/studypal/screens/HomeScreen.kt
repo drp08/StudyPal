@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -38,14 +37,9 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.kodein.di.DI
-import org.kodein.di.DIAware
-import org.kodein.di.bindProvider
 import org.kodein.di.bindSingleton
-import org.kodein.di.compose.rememberDI
 import org.kodein.di.compose.rememberInstance
 import org.kodein.di.compose.subDI
-import org.kodein.di.compose.withDI
 import org.kodein.di.instance
 
 object HomeScreen : Screen {

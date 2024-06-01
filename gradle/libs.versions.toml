@@ -18,7 +18,6 @@ kotlin = "2.0.0"
 ktor = "2.3.11"
 logback = "1.5.6"
 voyager = "1.0.0"
-ksp = "2.0.0-1.0.21"
 lifecycleViewModel = "2.8.1"
 dateTime = "0.6.0"
 
@@ -63,4 +62,3 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
