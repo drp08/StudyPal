@@ -8,4 +8,7 @@ import androidx.room.RoomDatabase
 )
 abstract class ClientDatabase: RoomDatabase(){
     abstract fun userDao(): UserDao
+    abstract fun subjectDao() : SubjectDao
+    abstract fun topicDao() : TopicDao
+    abstract fun sessionDao(): SessionDao
 }
