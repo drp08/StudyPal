@@ -42,7 +42,6 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(projects.shared)
-
             implementation(libs.voyager.navigator)
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.lifecycle.viewmodel.compose)
@@ -85,5 +84,18 @@ android {
     }
     dependencies {
         debugImplementation(compose.uiTooling)
+        implementation("androidx.compose.ui:ui:1.4.0")
+        implementation("androidx.compose.material:material:1.4.0")
+        implementation("androidx.compose.ui:ui-tooling-preview:1.4.0")
+        implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+        implementation("androidx.activity:activity-compose:1.5.1")
+        implementation("cafe.adriel.voyager:voyager-navigator:1.0.0-rc01")
+        implementation("cafe.adriel.voyager:voyager-core:1.0.0-rc01")
+        implementation ("io.coil-kt:coil-compose:2.6.0")
+
+
     }
+}
+dependencies {
+    implementation(libs.androidx.ui.android)
 }
