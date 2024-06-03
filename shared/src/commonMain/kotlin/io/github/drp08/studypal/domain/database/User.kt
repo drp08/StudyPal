@@ -9,5 +9,5 @@ data class User(
     val start_working_hours:Int,
     val end_working_hours:Int,
     val amount_of_study_hours_per_day:Int,
-    val max_session_length_in_hours:Float
+    val max_session_length_in_hours:Double
 )
