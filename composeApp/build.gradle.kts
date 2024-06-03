@@ -48,6 +48,8 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
             implementation(libs.kodein.di.framework.compose)
+
+            implementation(libs.network.chaintech.kmp.date.time.picker)
         }
     }
 }
