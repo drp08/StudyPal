@@ -1,19 +1,17 @@
 package io.github.drp08.studypal.domain.database
 
-import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
-@Dao
-interface UserDao {
+interface SubjectDao {
     @Upsert
-    suspend fun upsert(user: User)
+    suspend fun upsert(subject:Subject)
 
     @Delete
-    suspend fun delete(user: User)
+    suspend fun delete(subject: Subject)
 
-    @Query("SELECT * FROM user")
-    fun getAllUsers(): Flow<List<User>>
+    @Query("SELECT * FROM subject")
+     fun getAllSubjects():Flow<List<Subject>>
 }
