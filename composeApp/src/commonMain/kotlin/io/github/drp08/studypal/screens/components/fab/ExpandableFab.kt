@@ -1,7 +1,12 @@
 package io.github.drp08.studypal.screens.components.fab
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,10 +24,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -95,14 +100,20 @@ private fun FabMenu(
     visible: Boolean,
     modifier: Modifier = Modifier
 ) {
-    if (visible) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items.forEach { menuItem ->
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items.forEachIndexed { i, menuItem ->
+            AnimatedVisibility(
+                visible = visible,
+                enter = expandVertically(animationSpec = tween(durationMillis = 150))
+                        + fadeIn(animationSpec = tween(durationMillis = 150)),
+                exit = shrinkVertically(animationSpec = tween(durationMillis = 150))
+                        + fadeOut(animationSpec = tween(durationMillis = 150))
+            ) {
                 FabMenuItem(
                     item = menuItem,
                     onItemClick = {}
