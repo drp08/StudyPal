@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class User(
     @PrimaryKey val name:String,
-    val working_hours:Pair<Int,Int>,
+    val working_hours:String,
     val amount_of_study_hours_per_day:Int,
     val max_session_length_in_hours:Float
 )
