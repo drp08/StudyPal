@@ -16,3 +16,5 @@ body:
   - type: textarea
     attributes:
       label: Any other information required for this card?
+    validations:
+      required: false
