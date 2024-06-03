@@ -19,10 +19,9 @@ import cafe.adriel.voyager.core.screen.Screen
 object RegistrationScreen : Screen {
     @Composable
     override fun Content() {
-        var name by remember { mutableStateOf("") }
-        var workingHoursStart by remember { mutableStateOf("") }
-        var workingHoursEnd by remember { mutableStateOf("") }
-        var hoursPerDay by remember { mutableStateOf("") }
+
+        val viewController = remember { ViewController() }
+
 
         Column(
             modifier = Modifier
@@ -40,8 +39,8 @@ object RegistrationScreen : Screen {
             )
 
             TextField(
-                value = name,
-                onValueChange = { name = it },
+                value = viewController.name,
+                onValueChange = viewController::onNameChange,
                 label = { Text("Your name") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -67,8 +66,8 @@ object RegistrationScreen : Screen {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
-                    value = workingHoursStart,
-                    onValueChange = { workingHoursStart = it },
+                    value = viewController.workingHoursStart,
+                    onValueChange = viewController::onWorkingHoursStartChange,
                     label = { Text("Start") },
                     modifier = Modifier
                         .weight(1f)
@@ -88,8 +87,8 @@ object RegistrationScreen : Screen {
                 )
 
                 TextField(
-                    value = workingHoursEnd,
-                    onValueChange = { workingHoursEnd = it },
+                    value = viewController.workingHoursEnd,
+                    onValueChange = viewController::onWorkingHoursEndChange,
                     label = { Text("End") },
                     modifier = Modifier
                         .weight(1f)
@@ -104,8 +103,8 @@ object RegistrationScreen : Screen {
             }
 
             TextField(
-                value = hoursPerDay,
-                onValueChange = { hoursPerDay = it },
+                value = viewController.hoursPerDay,
+                onValueChange = viewController::onHoursPerDayChange,
                 label = { Text("I want to work ... Hours per day") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -142,97 +141,28 @@ object RegistrationScreen : Screen {
                 Text(text = "Register", fontSize = 18.sp)
             }
         }
-//        var username by remember { mutableStateOf("") }
-//        var email by remember { mutableStateOf("") }
-//        var password by remember { mutableStateOf("") }
-//        var passwordVisible by remember { mutableStateOf(false) }
-//
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(16.dp),
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-////            Image(
-////                painter = rememberAsyncImagePainter("https://via.placeholder.com/150"),
-////                contentDescription = "Logo",
-////                modifier = Modifier
-////                    .size(150.dp)
-////                    .padding(16.dp)
-////            )
-//
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//
-//            Text(
-//                text = "Register",
-//                style = MaterialTheme.typography.h4,
-//                color = MaterialTheme.colors.primary,
-//                modifier = Modifier.padding(bottom = 24.dp)
-//            )
-//
-//            TextField(
-//                value = username,
-//                onValueChange = { username = it },
-//                label = { Text("Username") },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 8.dp),
-//                singleLine = true,
-//                shape = RoundedCornerShape(8.dp),
-//                colors = TextFieldDefaults.textFieldColors(
-//                    backgroundColor = MaterialTheme.colors.surface
-//                )
-//            )
-//
-//            TextField(
-//                value = email,
-//                onValueChange = { email = it },
-//                label = { Text("Email") },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 8.dp),
-//                singleLine = true,
-//                shape = RoundedCornerShape(8.dp),
-//                colors = TextFieldDefaults.textFieldColors(
-//                    backgroundColor = MaterialTheme.colors.surface
-//                )
-//            )
-//
-//            TextField(
-//                value = password,
-//                onValueChange = { password = it },
-//                label = { Text("Password") },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 8.dp),
-//                singleLine = true,
-//                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-//                shape = RoundedCornerShape(8.dp),
-//                colors = TextFieldDefaults.textFieldColors(
-//                    backgroundColor = MaterialTheme.colors.surface
-//                ),
-////                trailingIcon = {
-////                    val image = if (passwordVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
-////
-////                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-////                        Icon(
-////                            painter = rememberImagePainter(image),
-////                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
-////                        )
-////                    }
-////                }
-//            )
-//
-//            Spacer(modifier = Modifier.height(24.dp))
-//
-//
-//            Button(
-//                onClick = { /* Handle registration */ },
-//                modifier = Modifier.fillMaxWidth()
-//            ) {
-//                Text(text = "Register")
-//            }
-//        }
+    }
+}
+
+class ViewController {
+    var name by mutableStateOf("")
+    var workingHoursStart by mutableStateOf("")
+    var workingHoursEnd by mutableStateOf("")
+    var hoursPerDay by mutableStateOf("")
+
+    fun onNameChange(newValue: String) {
+        name = newValue
+    }
+
+    fun onWorkingHoursStartChange(newValue: String) {
+        workingHoursStart = newValue
+    }
+
+    fun onWorkingHoursEndChange(newValue: String) {
+        workingHoursEnd = newValue
+    }
+
+    fun onHoursPerDayChange(newValue: String) {
+        hoursPerDay = newValue
     }
 }
