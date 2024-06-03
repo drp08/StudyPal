@@ -26,137 +26,145 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import io.github.drp08.studypal.di.AppModule
+import io.github.drp08.studypal.di.appModule
 import io.github.drp08.studypal.viewmodels.HomeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.kodein.di.bindSingleton
+import org.kodein.di.compose.rememberInstance
+import org.kodein.di.compose.subDI
+import org.kodein.di.instance
 
 object HomeScreen : Screen {
     @Composable
     override fun Content() {
-        val viewModel = viewModel { HomeViewModel(AppModule.schedulingRepository) }
-        val sessions by viewModel.sessions.collectAsState()
-        val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time.toSecondOfDay()
-
-        val navigator = LocalNavigator.currentOrThrow
-
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            floatingActionButton = {
-                FloatingActionButton(onClick = { viewModel.addNewSession() }) {
-                    Icon(Icons.Default.Add, contentDescription = null)
-                }
-            }
+        subDI(
+            parentDI = appModule,
+            diBuilder = { bindSingleton { HomeViewModel(instance()) }}
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(vertical = 24.dp, horizontal = 16.dp)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                if (sessions.isEmpty()) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "You don't have anything. Click the plus button",
-                            modifier = Modifier.padding(all = 16.dp)
-                        )
-                    }
-                } else {
-                    val session = sessions[0]
+            val viewModel by rememberInstance<HomeViewModel>()
+            val sessions by viewModel.sessions.collectAsState()
+            val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time.toSecondOfDay()
 
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Column(
+            val navigator = LocalNavigator.currentOrThrow
+
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                floatingActionButton = {
+                    FloatingActionButton(onClick = { viewModel.addNewSession() }) {
+                        Icon(Icons.Default.Add, contentDescription = null)
+                    }
+                }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(vertical = 24.dp, horizontal = 16.dp)
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    if (sessions.isEmpty()) {
+                        Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 4.dp, vertical = 6.dp)
                         ) {
-                            Text(text = "Next Revision/Event: ")
                             Text(
-                                text = session.name,
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally),
-                                fontSize = 18.sp
+                                text = "You don't have anything. Click the plus button",
+                                modifier = Modifier.padding(all = 16.dp)
                             )
-                            if (session.startTime > currentTime) {
-                                Text(text = "Starts in")
-                                Countdown(
-                                    from = session.startTime - currentTime,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                ) {
+                        }
+                    } else {
+                        val session = sessions[0]
+
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 4.dp, vertical = 6.dp)
+                            ) {
+                                Text(text = "Next Revision/Event: ")
+                                Text(
+                                    text = session.name,
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally),
+                                    fontSize = 18.sp
+                                )
+                                if (session.startTime > currentTime) {
+                                    Text(text = "Starts in")
+                                    Countdown(
+                                        from = session.startTime - currentTime,
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    ) {
+                                        CheckInButton(
+                                            navigator,
+                                            session.endTime,
+                                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                                        )
+                                    }
+                                } else {
                                     CheckInButton(
-                                        navigator,
-                                        session.endTime,
+                                        navigator = navigator,
+                                        endTime = session.endTime,
                                         modifier = Modifier.align(Alignment.CenterHorizontally)
                                     )
                                 }
-                            } else {
-                                CheckInButton(
-                                    navigator = navigator,
-                                    endTime = session.endTime,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
                             }
                         }
                     }
-                }
 
-                if (sessions.size > 1)
-                    Card(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 4.dp, vertical = 6.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                    if (sessions.size > 1)
+                        Card(
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(
-                                text = "Upcoming sessions/events today",
-                                fontSize = 18.sp
-                            )
-
-                            LazyColumn(
-                                modifier = Modifier.fillMaxWidth()
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 4.dp, vertical = 6.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                items(sessions.drop(1)) { subject ->
-                                    val startTime = LocalTime.fromSecondOfDay(subject.startTime)
-                                    val endTime = LocalTime.fromSecondOfDay(subject.endTime)
+                                Text(
+                                    text = "Upcoming sessions/events today",
+                                    fontSize = 18.sp
+                                )
 
-                                    Card(
-                                        modifier = Modifier
-                                            .padding(horizontal = 4.dp)
-                                            .fillMaxWidth()
-                                            .padding(vertical = 6.dp)
-                                    ) {
-                                        Column(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalAlignment = Alignment.CenterHorizontally
+                                LazyColumn(
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    items(sessions.drop(1)) { subject ->
+                                        val startTime = LocalTime.fromSecondOfDay(subject.startTime)
+                                        val endTime = LocalTime.fromSecondOfDay(subject.endTime)
+
+                                        Card(
+                                            modifier = Modifier
+                                                .padding(horizontal = 4.dp)
+                                                .fillMaxWidth()
+                                                .padding(vertical = 6.dp)
                                         ) {
-                                            Text(
-                                                text = "${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}"
-                                            )
-                                            Text(text = subject.name)
-                                            Text(text = "Session 0/${subject.noTotalSessions}")
+                                            Column(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                horizontalAlignment = Alignment.CenterHorizontally
+                                            ) {
+                                                Text(
+                                                    text = "${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}"
+                                                )
+                                                Text(text = subject.name)
+                                                Text(text = "Session 0/${subject.noTotalSessions}")
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
+                }
             }
         }
     }
