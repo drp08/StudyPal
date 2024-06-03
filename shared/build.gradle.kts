@@ -23,6 +23,7 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.kodein.di.framework.compose)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.resources)

@@ -9,21 +9,26 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.resources.Resources
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
+import org.kodein.di.DI
+import org.kodein.di.bindSingleton
+import org.kodein.di.instance
 
-object AppModule {
-    val httpClient: HttpClient = HttpClient {
-        install(Resources)
-        install(ContentNegotiation) {
-            json()
-        }
-        defaultRequest {
-            host = Constants.SERVER_HOST
-            port = Constants.SERVER_PORT
-            url {
-                protocol = URLProtocol.HTTP
+val appModule = DI {
+    bindSingleton<HttpClient>(sync = false) {
+        HttpClient {
+            install(Resources)
+            install(ContentNegotiation) {
+                json()
+            }
+            defaultRequest {
+                host = Constants.SERVER_HOST
+                port = Constants.SERVER_PORT
+                url {
+                    protocol = URLProtocol.HTTP
+                }
             }
         }
     }
 
-    val schedulingRepository: SchedulingRepository = SchedulingRepositoryImpl(httpClient)
+    bindSingleton<SchedulingRepository>(sync = false) { SchedulingRepositoryImpl(instance()) }
 }

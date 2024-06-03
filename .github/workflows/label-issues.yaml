@@ -19,7 +19,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
-          MILESTONE: Milestone 1
+          MILESTONE: Milestone 3
 
   label-issues:
     runs-on: ubuntu-latest
