@@ -1,21 +1,35 @@
 package io.github.drp08.studypal.screens
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Slider
+import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import kotlinx.datetime.LocalDateTime
@@ -27,6 +41,8 @@ import network.chaintech.utils.TimeFormat
 import network.chaintech.utils.WheelPickerDefaults
 import network.chaintech.utils.dateTimeToString
 import network.chaintech.utils.now
+import kotlin.math.roundToInt
+
 
 object AddEventScreen : Screen {
     @Composable
@@ -35,18 +51,25 @@ object AddEventScreen : Screen {
     }
 
     @Composable
-    fun EventNameTextField() {
-        var eventName by rememberSaveable { mutableStateOf("") }
+    fun SubjectNameTextField() {
+        var subjectName by rememberSaveable { mutableStateOf("") }
 
         OutlinedTextField(
-            value = eventName,
-            onValueChange = { eventName = it },
-            label = { Text("Event Name") }
+            value = subjectName,
+            onValueChange = { subjectName = it },
+            label = { Text("Subject Name") }
         )
     }
 
     @Composable
-    fun DateTimeBox() {
+    fun ExamDateBox() {
+        //var dateTime by rememberSaveable { mutuableStateOf("") }
+
+    }
+
+    // Todo: Change exam date to not include time
+    @Composable
+    fun ExamDateDialogueBox() {
         var showDateTimePicker by remember { mutableStateOf(false) }
         var dateTime by rememberSaveable { mutableStateOf("") }
 
@@ -77,6 +100,69 @@ object AddEventScreen : Screen {
                 onDismiss = { showDateTimePicker = false}
             )
         }
+
+        OutlinedButton(onClick = { showDateTimePicker = true }) {
+            Text("Exam Date? (Optional)")
+        }
+        Text(text = dateTime, textAlign = TextAlign.Left)
     }
+
+    @Composable
+    fun StudyHoursDropDown() {
+        val studyHoursToChoose = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9")
+        val expanded = remember { mutableStateOf(false) }
+        var studyHours by rememberSaveable { mutableStateOf(studyHoursToChoose[0]) }
+
+        Box(
+            contentAlignment = Alignment.CenterStart,
+            modifier = Modifier.clickable {
+                expanded.value = !expanded.value
+            }
+        ) {
+            Text (
+                text = studyHours,
+            )
+            Icon (
+                Icons.Filled.ArrowDropDown, "Amount of study hours per week?"
+            )
+            DropdownMenu(
+                expanded = expanded.value,
+                onDismissRequest = { expanded.value = false }
+            ) {
+                studyHoursToChoose.forEach {
+                        item ->
+                    DropdownMenuItem(
+                        onClick = {
+                            studyHours = item
+                            expanded.value = false
+                        }
+                    ) {
+                        Text (text = item)
+                    }
+                }
+            }
+        }
+
+        @Composable
+        fun ConfidenceSlider() {
+            var confidence by remember { mutableFloatStateOf(0f) }
+            Column {
+                Slider(
+                    value = confidence,
+                    onValueChange = { confidence = it.roundToInt().toFloat() },
+                    colors = SliderDefaults.colors(
+                        thumbColor = MaterialTheme.colors.secondary,
+                        activeTrackColor = MaterialTheme.colors.secondary,
+                        inactiveTrackColor = MaterialTheme.colors.secondaryVariant
+                    ),
+                    steps = 10,
+                    valueRange = 0f..10f
+                )
+                Text(text = confidence.toString())
+            }
+        }
+
+    }
+
 
 }
