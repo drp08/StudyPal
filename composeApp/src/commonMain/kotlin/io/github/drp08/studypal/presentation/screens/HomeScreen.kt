@@ -9,12 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Card
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,6 +28,8 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import io.github.drp08.studypal.di.appModule
 import io.github.drp08.studypal.presentation.viewmodels.HomeViewModel
+import io.github.drp08.studypal.screens.components.fab.ExpandableFab
+import io.github.drp08.studypal.screens.components.fab.FabItem
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
@@ -47,20 +45,21 @@ object HomeScreen : Screen {
     override fun Content() {
         subDI(
             parentDI = appModule,
-            diBuilder = { bindSingleton { HomeViewModel(instance()) }}
+            diBuilder = { bindSingleton { HomeViewModel(instance()) } }
         ) {
             val viewModel by rememberInstance<HomeViewModel>()
             val sessions by viewModel.sessions.collectAsState()
-            val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time.toSecondOfDay()
+            val currentTime = Clock.System.now()
+                .toLocalDateTime(TimeZone.currentSystemDefault()).time.toSecondOfDay()
 
             val navigator = LocalNavigator.currentOrThrow
 
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 floatingActionButton = {
-                    FloatingActionButton(onClick = { viewModel.addNewSession() }) {
-                        Icon(Icons.Default.Add, contentDescription = null)
-                    }
+                    ExpandableFab(
+                        items = listOf(FabItem("Subject"), FabItem("Event"))
+                    )
                 }
             ) {
                 Column(
@@ -164,6 +163,7 @@ object HomeScreen : Screen {
                                 }
                             }
                         }
+
                 }
             }
         }

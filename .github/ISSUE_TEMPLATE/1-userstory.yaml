@@ -3,18 +3,21 @@ description: Create a card for someone to tackle.
 body:
   - type: textarea
     attributes:
-      label: What is the user story?
+      label: User Story
+      description: What is the user story?
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: What the technical details required to implement this?
+      label: Technical Details
+      description: What are the technical details required to implement this?
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Any other information required for this card?
+      label: Additional Information
+      description: Is there any other information required for this card?
     validations:
       required: false
