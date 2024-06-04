@@ -1,12 +1,12 @@
-package io.github.drp08.studypal.screens
+package io.github.drp08.studypal.presentation.screens
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 
-object CalendarScreen : Screen {
+object ProfileScreen : Screen {
     @Composable
     override fun Content() {
-        Text(text = "Calendar Screen - Testing for deployment")
+        Text(text = "Profile Screen")
     }
 }

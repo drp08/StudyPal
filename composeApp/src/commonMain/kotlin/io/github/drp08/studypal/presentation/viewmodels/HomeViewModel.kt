@@ -1,4 +1,4 @@
-package io.github.drp08.studypal.viewmodels
+package io.github.drp08.studypal.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
