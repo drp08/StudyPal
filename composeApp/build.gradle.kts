@@ -117,6 +117,7 @@ room {
 }
 
 dependencies {
+    implementation(":20.3.3")
     add("kspCommonMainMetadata", libs.room.compiler)
 }
 
@@ -125,3 +126,4 @@ tasks.withType<KotlinCompilationTask<*>>().configureEach {
         dependsOn("kspCommonMainKotlinMetadata")
     }
 }
+
