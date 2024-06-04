@@ -23,18 +23,8 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.kodein.di.framework.compose)
             implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.resources)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.kotlinx.coroutines.core)
-        }
-        androidMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+            implementation(libs.ktor.resources)
         }
     }
 }
