@@ -28,8 +28,8 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import io.github.drp08.studypal.di.appModule
 import io.github.drp08.studypal.presentation.viewmodels.HomeViewModel
-import io.github.drp08.studypal.screens.components.fab.ExpandableFab
-import io.github.drp08.studypal.screens.components.fab.FabItem
+import io.github.drp08.studypal.presentation.screens.components.fab.ExpandableFab
+import io.github.drp08.studypal.presentation.screens.components.fab.FabItem
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime

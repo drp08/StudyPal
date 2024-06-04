@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
-import io.github.drp08.studypal.screens.components.ProfileSubjectCard
+import io.github.drp08.studypal.presentation.screens.components.fab.ProfileSubjectCard
 
 object ProfileScreen : Screen {
     @Composable

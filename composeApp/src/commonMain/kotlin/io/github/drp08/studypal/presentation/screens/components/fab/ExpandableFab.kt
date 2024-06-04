@@ -1,4 +1,4 @@
-package io.github.drp08.studypal.screens.components.fab
+package io.github.drp08.studypal.presentation.screens.components.fab
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
