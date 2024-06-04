@@ -37,15 +37,20 @@ class Scheduler {
     fun randomiseSessions(subjects:List<Subject>, user: User) : List<Session> {
         var sessions:MutableList<Session> = mutableListOf()
         var studyHours = 0
+        var scheduledHours: MutableList<Int> = mutableListOf() // to ensure that a time isn't 'double-booked'
         while (studyHours != user.maxNumberOfStudyHours){
             // chooses a random subject
             val subject = subjects.random()
 
             // chooses a random topic
             val topic = subject.topics.random()
+            var time = 0
+            while (scheduledHours.contains(time)){
+                time = Random.nextInt(user.startWorkingHours,user.endWorkingHours)
+            }
+            // chooses a random start time that hasn't already been scheduled for
 
-            // chooses a random start time
-            val time = Random.nextInt(user.startWorkingHours,user.endWorkingHours)
+            scheduledHours.add(time)
 
             // create a new session + add to DB (TO-DO)
             sessions.add(Session(subject,topic,time,time+1))
@@ -56,6 +61,6 @@ class Scheduler {
             // increment number of hours studied
             studyHours += 1
         }
-        return sessions
+        return sessions.sortedBy { it.startTime }
     }
 }
