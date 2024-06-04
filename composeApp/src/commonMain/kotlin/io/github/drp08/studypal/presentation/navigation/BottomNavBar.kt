@@ -1,4 +1,4 @@
-package io.github.drp08.studypal.navigation
+package io.github.drp08.studypal.presentation.navigation
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem

@@ -1,4 +1,4 @@
-package io.github.drp08.studypal.screens
+package io.github.drp08.studypal.presentation.screens
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
