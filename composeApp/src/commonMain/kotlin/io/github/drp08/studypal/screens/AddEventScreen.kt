@@ -47,7 +47,12 @@ import kotlin.math.roundToInt
 object AddEventScreen : Screen {
     @Composable
     override fun Content() {
-        TODO()
+        Column {
+            SubjectNameTextField()
+            ExamDateDialogueBox()
+            StudyHoursDropDown()
+            ConfidenceSlider()
+        }
     }
 
     @Composable
@@ -59,12 +64,6 @@ object AddEventScreen : Screen {
             onValueChange = { subjectName = it },
             label = { Text("Subject Name") }
         )
-    }
-
-    @Composable
-    fun ExamDateBox() {
-        //var dateTime by rememberSaveable { mutuableStateOf("") }
-
     }
 
     // Todo: Change exam date to not include time
@@ -94,7 +93,7 @@ object AddEventScreen : Screen {
                 containerColor = Color.White,
                 shape = RoundedCornerShape(10.dp),
                 dateTimePickerView = DateTimePickerView.DIALOG_VIEW,
-                onDoneClick = { dateTime = dateTimeToString(it, "yyyy-MM-dd hh:mm")
+                onDoneClick = { dateTime = dateTimeToString(it, "hh:mm dd-MM-yyyy")
                               showDateTimePicker = false},
                 selectorProperties = WheelPickerDefaults.selectorProperties(borderColor = Color.DarkGray),
                 onDismiss = { showDateTimePicker = false}
@@ -142,27 +141,24 @@ object AddEventScreen : Screen {
                 }
             }
         }
-
-        @Composable
-        fun ConfidenceSlider() {
-            var confidence by remember { mutableFloatStateOf(0f) }
-            Column {
-                Slider(
-                    value = confidence,
-                    onValueChange = { confidence = it.roundToInt().toFloat() },
-                    colors = SliderDefaults.colors(
-                        thumbColor = MaterialTheme.colors.secondary,
-                        activeTrackColor = MaterialTheme.colors.secondary,
-                        inactiveTrackColor = MaterialTheme.colors.secondaryVariant
-                    ),
-                    steps = 10,
-                    valueRange = 0f..10f
-                )
-                Text(text = confidence.toString())
-            }
-        }
-
     }
 
-
+    @Composable
+    fun ConfidenceSlider() {
+        var confidence by remember { mutableFloatStateOf(0f) }
+        Column {
+            Slider(
+                value = confidence,
+                onValueChange = { confidence = it.roundToInt().toFloat() },
+                colors = SliderDefaults.colors(
+                    thumbColor = MaterialTheme.colors.secondary,
+                    activeTrackColor = MaterialTheme.colors.secondary,
+                    inactiveTrackColor = MaterialTheme.colors.secondaryVariant
+                ),
+                steps = 10,
+                valueRange = 0f..10f
+            )
+            Text(text = confidence.toString())
+        }
+    }
 }
