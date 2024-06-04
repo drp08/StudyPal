@@ -96,6 +96,12 @@ object HomeScreen : Screen {
                                         .align(Alignment.CenterHorizontally),
                                     fontSize = 18.sp
                                 )
+                                Text(
+                                    text = "${session.startTime} : ${session.endTime}",
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally),
+                                    fontSize = 18.sp
+                                )
                                 if (session.startTime > currentTime) {
                                     Text(text = "Starts in")
                                     Countdown(

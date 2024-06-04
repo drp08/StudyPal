@@ -20,9 +20,9 @@ class HomeViewModel(
         io.github.drp08.studypal.presentation.Subject(
             "Subject 1",
             3,
-            5,
             2,
-            2,
+            0,
+            0,
             mutableListOf(
                 Topic("Topic 1"),
                 Topic("Topic 2"),
@@ -33,8 +33,8 @@ class HomeViewModel(
         io.github.drp08.studypal.presentation.Subject(
             "Subject 2",
             3,
-            5,
             2,
+            0,
             0,
             mutableListOf(
                 Topic("Topic 1"),
@@ -46,9 +46,9 @@ class HomeViewModel(
         io.github.drp08.studypal.presentation.Subject(
             "Subject 3",
             3,
-            5,
             2,
-            2,
+            0,
+            0,
             mutableListOf(
                 Topic("Topic 1"),
                 Topic("Topic 2"),
@@ -57,7 +57,7 @@ class HomeViewModel(
             )
         )
     )
-    private var user = User("Harini",10,20,5)
+    private var user = User("Harini",18,24,5)
     fun getSessions() : List<Session>{
         return Scheduler().randomiseSessions(subjects,user)
     }

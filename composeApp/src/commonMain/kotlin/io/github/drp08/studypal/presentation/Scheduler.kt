@@ -37,7 +37,7 @@ class Scheduler {
     fun randomiseSessions(subjects:List<Subject>, user: User) : List<Session> {
         var sessions:MutableList<Session> = mutableListOf()
         var studyHours = 0
-        var scheduledHours: MutableList<Int> = mutableListOf() // to ensure that a time isn't 'double-booked'
+        var scheduledHours: MutableList<Int> = mutableListOf(0) // to ensure that a time isn't 'double-booked'
         while (studyHours != user.maxNumberOfStudyHours){
             // chooses a random subject
             val subject = subjects.random()
