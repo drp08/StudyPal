@@ -13,7 +13,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -27,6 +26,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import io.github.drp08.studypal.di.appModule
+import io.github.drp08.studypal.presentation.Scheduler
+import io.github.drp08.studypal.presentation.Subject
+import io.github.drp08.studypal.presentation.Topic
+import io.github.drp08.studypal.presentation.User
 import io.github.drp08.studypal.presentation.viewmodels.HomeViewModel
 import io.github.drp08.studypal.screens.components.fab.ExpandableFab
 import io.github.drp08.studypal.screens.components.fab.FabItem
@@ -48,7 +51,51 @@ object HomeScreen : Screen {
             diBuilder = { bindSingleton { HomeViewModel(instance()) } }
         ) {
             val viewModel by rememberInstance<HomeViewModel>()
-            val sessions by viewModel.sessions.collectAsState()
+            var subjects = mutableListOf (
+                    Subject(
+                        "Subject 1",
+                        3,
+                        5,
+                        2,
+                        2,
+                        mutableListOf(
+                            Topic("Topic 1"),
+                            Topic("Topic 2"),
+                            Topic("Topic 3"),
+                            Topic("Topic 4")
+                        )
+                    ),
+            Subject(
+                "Subject 2",
+                3,
+                5,
+                2,
+                0,
+                mutableListOf(
+                    Topic("Topic 1"),
+                    Topic("Topic 2"),
+                    Topic("Topic 3"),
+                    Topic("Topic 4")
+                )
+            ),
+            Subject(
+                "Subject 3",
+                3,
+                5,
+                2,
+                2,
+                mutableListOf(
+                    Topic("Topic 1"),
+                    Topic("Topic 2"),
+                    Topic("Topic 3"),
+                    Topic("Topic 4")
+                )
+            )
+            )
+            var user = User("Harini",10,20,5)
+
+            val sessions = Scheduler().randomiseSessions(subjects,user)
+
             val currentTime = Clock.System.now()
                 .toLocalDateTime(TimeZone.currentSystemDefault()).time.toSecondOfDay()
 
@@ -92,7 +139,7 @@ object HomeScreen : Screen {
                             ) {
                                 Text(text = "Next Revision/Event: ")
                                 Text(
-                                    text = session.name,
+                                    text = "${session.subject.name} : ${session.topic.name}",
                                     modifier = Modifier
                                         .align(Alignment.CenterHorizontally),
                                     fontSize = 18.sp
@@ -138,10 +185,7 @@ object HomeScreen : Screen {
                                 LazyColumn(
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    items(sessions.drop(1)) { subject ->
-                                        val startTime = LocalTime.fromSecondOfDay(subject.startTime)
-                                        val endTime = LocalTime.fromSecondOfDay(subject.endTime)
-
+                                    items(sessions.drop(1)) { session ->
                                         Card(
                                             modifier = Modifier
                                                 .padding(horizontal = 4.dp)
@@ -153,10 +197,10 @@ object HomeScreen : Screen {
                                                 horizontalAlignment = Alignment.CenterHorizontally
                                             ) {
                                                 Text(
-                                                    text = "${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}"
+                                                    text = "${session.startTime} to ${session.endTime}"
                                                 )
-                                                Text(text = subject.name)
-                                                Text(text = "Session 0/${subject.noTotalSessions}")
+                                                Text(text = "${session.subject.name} : ${session.topic.name}")
+                                                Text(text = "Session 0/${session.subject.totalNumOfSessions}")
                                             }
                                         }
                                     }
