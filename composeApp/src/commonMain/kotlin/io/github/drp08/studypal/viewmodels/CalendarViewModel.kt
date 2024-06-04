@@ -42,7 +42,7 @@ class CalendarViewModel : ViewModel() {
         }
     }
 
-    fun <T> StateFlow<List<T>>.toMutableList(): MutableList<T> {
+    private fun <T> StateFlow<List<T>>.toMutableList(): MutableList<T> {
         val currentValue = value
         return currentValue.toMutableList()
     }
