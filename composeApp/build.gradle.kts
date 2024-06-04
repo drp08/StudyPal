@@ -50,6 +50,7 @@ kotlin {
 
             implementation(libs.kodein.di.framework.compose)
 
+            implementation(libs.network.chaintech.kmp.date.time.picker)
             implementation(libs.ktor.client.core)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.serialization.kotlinx.json)
