@@ -91,4 +91,5 @@ android {
 dependencies {
     implementation(libs.places)
     implementation(libs.androidx.core.i18n)
+    implementation(libs.androidx.material)
 }
