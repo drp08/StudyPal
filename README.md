@@ -41,4 +41,5 @@
 - [@cybercoder-naj](https://github.com/cybercoder-naj)
 - [@Harini-Sritharar](https://github.com/Harini-Sritharar)
 - [@Virgina-Watson](https://github.com/Virginia-Watson)
-- Arabella Hurrell
+- [@Arabella-Hurrell](https://github.com/arabellahurrell)
+  
