@@ -24,7 +24,7 @@ class CalendarViewModel : ViewModel() {
         Event(LocalTime(8, 30), LocalTime(9, 0), "Meeting 1"),
         Event(LocalTime(11, 0), LocalTime(12, 30), "Lunch"),
         Event(LocalTime(13, 0), LocalTime(15, 0), "Meeting 2"),
-        Event(LocalTime(15, 30), LocalTime(17, 0), "Workshop"),
+        Event(LocalTime(16, 0,0), LocalTime(17, 30), "Workshop"),
     )
 
     private val _events = MutableStateFlow(emptyList<Event>())

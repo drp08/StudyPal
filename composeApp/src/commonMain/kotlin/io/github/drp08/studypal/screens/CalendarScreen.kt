@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import io.github.drp08.studypal.di.appModule
 import io.github.drp08.studypal.viewmodels.CalendarViewModel
+import io.github.drp08.studypal.viewmodels.Event
 import kotlinx.datetime.*
 import org.kodein.di.bindSingleton
 import org.kodein.di.compose.rememberInstance
@@ -29,7 +30,8 @@ object CalendarScreen : Screen {
         subDI(
             parentDI = appModule,
             diBuilder = { bindSingleton { CalendarViewModel() }}
-        ) { val viewModel by rememberInstance<CalendarViewModel>()
+        ) {
+            val viewModel by rememberInstance<CalendarViewModel>()
         val currentDate by viewModel.currentDate.collectAsState(initial = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date)
         val events by viewModel.events.collectAsState(initial = emptyList())
 
@@ -64,46 +66,69 @@ object CalendarScreen : Screen {
     }
 
     @Composable
-    fun TimeSlotRow(time: LocalTime, events: List<io.github.drp08.studypal.viewmodels.Event>) {
+    fun TimeSlotRow(time: LocalTime, events: List<Event>) {
+        val eventsInSlot = events.filter { it.startTime <= time.plusMinutes(60) && it.endTime >= time }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
                 .background(Color.LightGray.copy(alpha = 0.3f)),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
-            val hourString = if (time.hour < 10) "0${time.hour}" else time.hour.toString()
-            val minuteString = if (time.minute < 10) "0${time.minute}" else time.minute.toString()
-            val formattedTime = "$hourString:$minuteString"
+            val formattedTime = formattedTime(time)
             Text(
                 text = formattedTime,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(8.dp).weight(1f)
+                modifier = Modifier.padding(8.dp).width(60.dp)
             )
 
-            val event = events.find {
-                val eventStart = it.startTime
-                val eventEnd = it.endTime
-                time >= eventStart && time.plusMinutes(30) <= eventEnd }
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .background(if (event != null) Color.Blue.copy(alpha = 0.7f) else Color.Transparent)
+            Column(
+                modifier = Modifier.fillMaxHeight().weight(1f)
             ) {
-                if (event != null) {
-                    Text(text = event.title, color = Color.White, modifier = Modifier.padding(8.dp))
+                eventsInSlot.forEach { event ->
+                    EventBlock(event, time)
                 }
             }
         }
     }
+    @Composable
+    fun EventBlock(event: Event, time: LocalTime) {
+        val eventStartMinutes = if (event.startTime >= time) {
+            (event.startTime.hour * 60 + event.startTime.minute) - (time.hour * 60 + time.minute)
+        } else {
+            0
+        }
+        val eventEndMinutes = if (event.endTime < time.plusMinutes(60)) {
+            (event.endTime.hour * 60 + event.endTime.minute) - (time.hour * 60 + time.minute)
+        } else {
+            60
+        }
+        val eventHeight = ((eventEndMinutes - eventStartMinutes) * 60 / 60).dp
+
+        Box(
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp, top = eventStartMinutes.dp)
+                .height(eventHeight)
+                .background(Color.Blue.copy(alpha = 0.7f))
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = event.title,
+                color = Color.White,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+    }
+
+
     private fun generateTimeSlots(startTime: LocalTime, endTime: LocalTime): List<LocalTime> {
         val timeSlots = mutableListOf<LocalTime>()
         var current = startTime
         while (current <= endTime) {
             timeSlots.add(current)
-            current = current.plusMinutes(30) // Add 1 hour
+            current = current.plusMinutes(60) // Add 1 hour
         }
         return timeSlots
     }
@@ -119,4 +144,10 @@ object CalendarScreen : Screen {
 private operator fun Int.compareTo(otherTime: LocalTime): Int {
     val thisTime = LocalTime(this, 0)
     return thisTime.compareTo(otherTime)
+}
+
+private fun formattedTime(time: LocalTime): String {
+    val hourString = if (time.hour < 10) "0${time.hour}" else time.hour.toString()
+    val minuteString = if (time.minute < 10) "0${time.minute}" else time.minute.toString()
+    return "$hourString:$minuteString"
 }
